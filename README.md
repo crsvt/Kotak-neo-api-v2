@@ -53,13 +53,12 @@ from neo_api_client import NeoAPI
  
 # access_token: It is optional. 
 # environment: You pass prod to connect to live server
-# neo_fin_key: Key you recieve at the time of api registration on your registered email id. Pass None if not available
-# base_url: You'll get by calling base_url api
+# neo_fin_key: It is optional. Pass None.
 # consumer_key: this is the token that is available on your NEO app or website.
-# To get consumer key, login to kotak NEO app or web, then go to invest tab, click trade api card. Here generate application.
-# with default application, you will have a copyable token. Pass this token in consumer_key inside single quotes.
+# To get consumer key, login to kotak NEO app or web -> invest tab -> trade api card. Generate application.
+# with default application, you will have a copyable token. Pass this token in consumer_key.
 
-client = NeoAPI(environment='prod', access_token=None, neo_fin_key=None, consumer_key='YOUR_TOKEN_FROM_NEO_APP_OR_WEB')
+client = NeoAPI(environment='prod', access_token=None, neo_fin_key=None, consumer_key='YOUR_TOKEN')
 
 
 # Login using TOTP
@@ -96,11 +95,12 @@ client.totp_validate(mpin="")
 
 
 # Once you have session token after completing 2FA, you can place the order by using below function
-# exchange_segment: Expected values are nse_cm, bse_cm, nse_fo, bse_fo, cde_fo. 
+# exchange_segment: Expected values are nse_cm, bse_cm, nse_fo, bse_fo, cde_fo, mcx_fo. 
 # For exchange_segment nse_cm expected product=NRML, CNC, MIS, CO, BO. Add order_type=L, MKT, SL, SL-M. 
 # For exchange_segment bse_cm expected product=NRML, CNC, MIS, CO, BO. Add order_type=L, MKT, SL, SL-M.
 # For exchange_segment nse_fo expected product=NRML, MIS, BO. Add order_type=L, MKT, SL, SL-M.
 # For exchange_segment bse_fo expected product=NRML, MIS. Add order_type=L, MKT, SL, SL-M.
+# For exchange_segment mcx_fo expected product=NRML, MIS. Add order_type=L, MKT, SL, SL-M.
 
 # For exchange_segment cde_fo expected product=NRML, MIS. Add order_type=L, MKT, SL, SL-M.
 
@@ -229,7 +229,7 @@ client.limits(segment="", exchange="", product="")
 
 # Get Margin required for Equity orders. 
 # The function calculates the margin required for a given trade.
-# exchange_segment: Expected values are nse_cm, bse_cm, nse_fo, bse_fo, cde_fo. 
+# exchange_segment: Expected values are nse_cm, bse_cm, nse_fo, bse_fo, cde_fo, mcx_fo. 
 # price: scrip price
 # order_type: Expected values are L, MKT, SL, SL-M
 # product: Expected values are NRML, CNC, MIS, CO, BO
@@ -243,11 +243,11 @@ client.margin_required(exchange_segment = "", price = "", order_type= "", produc
 client.scrip_master()
 
 # Get Scrip Master CSV file for specific Exchange Segment. 
-# exchange_segment: Section of a stock exchange. Its a mandatory param. Expected values are nse_cm, bse_cm, nse_fo, bse_fo, cde_fo
+# exchange_segment: Section of a stock exchange. Its a mandatory param. Expected values are nse_cm, bse_cm, nse_fo, bse_fo, cde_fo, mcx_fo
 client.scrip_master(exchange_segment = "")
 
 # Search for the Scrip details from Scrip master file
-# exchange_segment: Section of a stock exchange. Its a mandatory param. Expected values are nse_cm, bse_cm, nse_fo, bse_fo, cde_fo
+# exchange_segment: Section of a stock exchange. Its a mandatory param. Expected values are nse_cm, bse_cm, nse_fo, bse_fo, cde_fo, mcx_fo
 client.search_scrip(exchange_segment="", symbol="", expiry="", option_type="",
                     strike_price="")
 
@@ -262,7 +262,7 @@ instrument_tokens = [
     # Quotes API can be accessed by access token without completing login.
 # instrument_tokens: This is a list of dictionaries.
     # instrument_token: The instrument token of the stock
-    # exchange_segment: Expected values are nse_cm, bse_cm, nse_fo, bse_fo, cde_fo
+    # exchange_segment: Expected values are nse_cm, bse_cm, nse_fo, bse_fo, cde_fo, mcx_fo
 client.quotes(instrument_tokens = instrument_tokens, quote_type = "")
 
 def on_message(message):
@@ -288,7 +288,7 @@ client.on_open = on_open  # called when websocket successfully connects
 # By Default isDepth is set as False and you want to get the depth information set the isDepth flag as True
 # instrument_tokens: This is a list of dictionaries.
     # instrument_token: The instrument token of the stock which you will get from master scrip file
-    # exchange_segment: Expected values are nse_cm, bse_cm, nse_fo, bse_fo, cde_fo
+    # exchange_segment: Expected values are nse_cm, bse_cm, nse_fo, bse_fo, cde_fo, mcx_fo
 # isIndex: If you want to subscribe to index data, set isIndex to True
 # isDepth: If you want to subscribe to depth data, set isDepth to True
 client.subscribe(instrument_tokens = instrument_tokens, isIndex=False, isDepth=False)
@@ -296,7 +296,7 @@ client.subscribe(instrument_tokens = instrument_tokens, isIndex=False, isDepth=F
 # Un_Subscribes the given tokens. First the tokens will be checked weather that is subscribed. If not Subscribed we will send you the error message else we will unsubscribe the give tokens
 # instrument_tokens: This is a list of dictionaries.
     # instrument_token: The instrument token of the stock
-    # exchange_segment: Expected values are nse_cm, bse_cm, nse_fo, bse_fo, cde_fo
+    # exchange_segment: Expected values are nse_cm, bse_cm, nse_fo, bse_fo, cde_fo, mcx_fo
 # isIndex: If you want to unsubscribe to index data, set isIndex to True
 # isDepth: If you want to unsubscribe to depth data, set isDepth to True
 client.un_subscribe(instrument_tokens=instrument_tokens, isIndex=False, isDepth=False)
