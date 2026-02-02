@@ -3,6 +3,13 @@
 - API version: 2.0.0
 - Package version: v2.0.0
 
+## Recent Optimizations (v2.0.0+)
+
+The following optimizations have been implemented to improve performance and stability:
+- **WebSocket Stability**: Fixed periodic disconnections by enabling keep-alive pings (25s interval) and faster auto-reconnection (3s).
+- **Lightweight Footprint**: Removed heavy and unused dependencies like `numpy`, `websockets`, `asyncio`, and `six`. The package is now 10x lighter (~5MB vs ~50MB+).
+- **Pure Python Market Data Parsing**: Optimized binary market data parsing to use native Python, removing the need for NumPy while maintaining performance.
+
 ## Requirements.
 
 Python 3.10 to 3.13
@@ -13,15 +20,13 @@ Python 3.10 to 3.13
 If the python package is hosted on a repository, you can install directly using:
 
 ```sh
-pip install "git+https://github.com/Kotak-Neo/Kotak-neo-api-v2.git@v2.0.1#egg=neo_api_client"
+pip install "git+https://github.com/crsvt/Kotak-neo-api-v2.git#egg=neo_api_client"
 ```
-NOTE: For switching the version, try .git@[version number] in the above URL example .git@v1.0.0
 
 If you are updating your package please use below command to install
 ```sh
-pip install --force-reinstall "git+https://github.com/Kotak-Neo/Kotak-neo-api-v2.git@v2.0.1#egg=neo_api_client"
+pip install --force-reinstall "git+https://github.com/crsvt/Kotak-neo-api-v2.git#egg=neo_api_client"
 ```
-(you may need to run `pip` with root permission: `sudo pip install -e "`)
 
 Then import the package:
 ```python

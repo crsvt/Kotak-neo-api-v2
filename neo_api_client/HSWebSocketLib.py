@@ -12,6 +12,10 @@ isEncyptIn = True
 MAX_SCRIPS = 100
 topic_list = {}
 counter = 0
+
+# Initialize global WebSocket variables to prevent NameError
+ws = None
+hsiWs = None
 FieldTypes = {
     'FLOAT32': 1,
     'LONG': 2,
@@ -718,8 +722,10 @@ def buf2long(a):
 
 
 def buf2string(a):
-    import numpy as np
-    return ''.join(map(chr, np.frombuffer(a, dtype=np.uint8)))
+    """Convert byte array to string without numpy dependency."""
+    if isinstance(a, (bytes, bytearray)):
+        return a.decode('latin-1')
+    return bytes(a).decode('latin-1')
 
 
 class ScripTopicData(TopicData):
@@ -1126,7 +1132,8 @@ class StartServer:
         else:
             print("WebSocket not initialized!")
 
-        ws.run_forever(ping_interval=0, reconnect=5,sslopt={"cert_reqs": ssl.CERT_NONE})
+        # Improved WebSocket settings: ping every 25s to keep connection alive, auto-reconnect after 3s
+        ws.run_forever(ping_interval=25, ping_timeout=10, reconnect=3, sslopt={"cert_reqs": ssl.CERT_NONE})
 
     def on_open(self, ws):
         # print("[OnOpen]: Function is running in HSWebscoket")
@@ -1279,7 +1286,8 @@ class StartHSIServer:
                                            on_message=self.on_message,
                                            on_error=self.on_error,
                                            on_close=self.on_close)
-            hsiWs.run_forever(ping_interval=5,reconnect=5,sslopt={"cert_reqs": ssl.CERT_NONE})
+            # Improved WebSocket settings for order feed: ping every 25s, auto-reconnect after 3s
+            hsiWs.run_forever(ping_interval=25, ping_timeout=10, reconnect=3, sslopt={"cert_reqs": ssl.CERT_NONE})
         except Exception:
             print("WebSocket not supported!")
         

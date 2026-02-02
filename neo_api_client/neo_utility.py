@@ -1,6 +1,3 @@
-from __future__ import absolute_import
-
-import six
 import jwt
 from neo_api_client.exceptions import ApiValueError
 from neo_api_client.urls import UAT_BASE_URL, BASE_URL

@@ -4,7 +4,7 @@ import json
 import logging
 import re
 import requests
-from six.moves.urllib.parse import urlencode
+from urllib.parse import urlencode
 from neo_api_client.exceptions import ApiException
 
 
